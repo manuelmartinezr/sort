@@ -1,0 +1,248 @@
+public static void main(String[] args) {
+        int[][] ClosestPair = new int[2][2];
+        int[][] P = {
+            {2, 7}, {4, 13}, {5, 7}, {10, 5},
+            {13, 9}, {15, 5}, {17, 7}
+        };
+        System.out.println("Minimum distance is " + dividex(P, ClosestPair));
+        System.out.println("Closest pair is");
+        print(ClosestPair);
+    }
+
+    public static void print(int a[][]) {
+        for (int i = 0; i < a.length; i++) {
+            for (int j = 0; j < a[0].length; j++) {
+                System.out.print(a[i][j] + "|");
+            }
+            System.out.println("");
+        }
+    }
+
+    public static double dividex(int a[][], int ClosestPair[][]) {
+        if (a.length <= 3) {
+            return closestp(a, ClosestPair);
+        } else {
+            xsort(a);
+            int b[][] = new int[a.length / 2][a[0].length];
+            for (int i = 0; i < a.length / 2; i++) {
+                b[i][0] = a[i][0];
+                b[i][1] = a[i][1];
+            }
+            int c[][] = new int[a.length / 2][a[0].length];
+            int j = 0;
+            for (int i = a.length / 2; i < a.length; i++) {
+                c[j][0] = a[i][0];
+                c[j][1] = a[i][1];
+                j += 1;
+            }
+            int[][] ClosestPairLeft = new int[2][2];
+            int[][] ClosestPairRight = new int[2][2];
+            double dmin;
+            double dmin_left = dividey(b, ClosestPairLeft);
+            double dmin_right = dividey(c, ClosestPairRight);
+            if (dmin_left < dmin_right) {
+                dmin = dmin_left;
+                ClosestPair[0][0] = ClosestPairLeft[0][0];
+                ClosestPair[0][1] = ClosestPairLeft[0][1];
+
+                ClosestPair[1][0] = ClosestPairLeft[1][0];
+                ClosestPair[1][1] = ClosestPairLeft[1][1];
+            } else {
+                dmin = dmin_right;
+                ClosestPair[0][0] = ClosestPairRight[0][0];
+                ClosestPair[0][1] = ClosestPairRight[0][1];
+
+                ClosestPair[1][0] = ClosestPairRight[1][0];
+                ClosestPair[1][1] = ClosestPairRight[1][1];
+
+            }
+            dmin =  combine (b, c, ClosestPair, dmin);
+            return dmin;
+        }
+    }
+    public static double combine(int b[][], int c[][], int ClosestPair[][], double dmin){
+        int mid[][] = new int[b.length + 1][b[0].length];
+            mid[0][0] = b[b.length-1][0];
+            mid[0][1] = b[b.length-1][1];
+            int l = 1;
+            for (int i = 0; i < b.length; i++) {
+                mid[l][0] = c[i][0];
+                mid[l][1] = c[i][1];
+                l+=1;
+            }
+            int[][] ClosestPairMid = new int[2][2];
+            double d_mid = closestp(mid, ClosestPairMid);
+            if (d_mid < dmin){
+                dmin = d_mid;
+                ClosestPair[0][0] = ClosestPairMid[0][0];
+                ClosestPair[0][1] = ClosestPairMid[0][1];
+
+                ClosestPair[1][0] = ClosestPairMid[1][0];
+                ClosestPair[1][1] = ClosestPairMid[1][1];
+            }
+            int mid2[][] = new int[b.length+1][b[0].length];
+            mid2[b.length][0] = c[0][0];
+            mid2[b.length][1] = c[0][1];
+            for (int i = 1; i<b.length; i++){
+                mid2[i][0] = b[i][0];
+                mid2[i][0] = b[i][0];
+            }
+            int[][] ClosestPairMid2 = new int[2][2];
+            double d_mid2 = closestp(mid, ClosestPairMid2);
+            if (d_mid2 < dmin){
+                dmin = d_mid2;
+                ClosestPair[0][0] = ClosestPairMid2[0][0];
+                ClosestPair[0][1] = ClosestPairMid2[0][1];
+
+                ClosestPair[1][0] = ClosestPairMid2[1][0];
+                ClosestPair[1][1] = ClosestPairMid2[1][1];
+            }
+            return dmin;
+    }
+    public static double dividey(int b[][], int ClosestPair[][]) {
+        if (b.length <= 3) {
+            return closestp(b, ClosestPair);
+        } else {
+            ysort(b);
+            int b1[][] = new int[b.length / 2][b[0].length];
+            for (int i = 0; i < b.length / 2; i++) {
+                b1[i][0] = b[i][0];
+                b1[i][1] = b[i][1];
+            }
+            int b2[][] = new int[b.length / 2][b[0].length];
+            int j = 0;
+            for (int i = b.length / 2; i < b.length; i++) {
+                b2[j][0] = b[i][0];
+                b2[j][1] = b[i][1];
+                j += 1;
+            }
+            int[][] ClosestPairUp = new int[2][2];
+            int[][] ClosestPairDown = new int[2][2];
+            double dmin;
+            double dmin_up = dividex(b1, ClosestPairUp);
+            double dmin_down = dividex(b2, ClosestPairDown);
+            if (dmin_up < dmin_down) {
+                dmin = dmin_up;
+                ClosestPair[0][0] = ClosestPairUp[0][0];
+                ClosestPair[0][1] = ClosestPairUp[0][1];
+
+                ClosestPair[1][0] = ClosestPairUp[1][0];
+                ClosestPair[1][1] = ClosestPairUp[1][1];
+            } else {
+                dmin = dmin_down;
+                ClosestPair[0][0] = ClosestPairDown[0][0];
+                ClosestPair[0][1] = ClosestPairDown[0][1];
+
+                ClosestPair[1][0] = ClosestPairDown[1][0];
+                ClosestPair[1][1] = ClosestPairDown[1][1];
+
+            }
+            dmin = combine(b1, b2, ClosestPair, dmin);
+            return dmin;
+        }
+    }
+
+    public static double distance(int p[][], int i, int j) {
+        int xi = p[i][0];
+        int yi = p[i][1];
+        int xj = p[j][0];
+        int yj = p[j][1];
+        double d = (xj - xi) * (xj - xi) + (yj - yi) * (yj - yi);
+        return Math.sqrt(d);
+    }
+
+    public static double closestp(int p[][], int ClosestPair[][]) {
+        double d_min = Integer.MAX_VALUE;
+        double d;
+        int f = 0;
+        int s = 0;
+        for (int i = 0; i < p.length - 1; i++) {
+            for (int j = i + 1; j < p.length; j++) {
+                d = distance(p, i, j);
+                if (d < d_min) {
+                    f = i;
+                    s = j;
+                    d_min = d;
+                }
+            }
+        }
+        ClosestPair[0][0] = p[f][0];
+        ClosestPair[0][1] = p[f][1];
+        ClosestPair[1][0] = p[s][0];
+        ClosestPair[1][1] = p[s][1];
+        return (d_min);
+    }
+
+    public static int[][] xsort(int a[][]) {
+        int b[] = new int[a.length];
+        int c[] = new int[a.length];
+        for (int i = 0; i < a.length; i++) {
+            b[i] = a[i][0];
+        }
+        for (int i = 0; i < a.length; i++) {
+            c[i] = a[i][1];
+        }
+        boolean swapped = true;
+        while (swapped) {
+            swapped = false;
+            for (int i = 0; i < b.length - 1; i++) {
+                if (b[i] > b[i + 1]) {
+                    swapped = true;
+                    int temp = b[i];
+                    int temp2 = c[i];
+                    b[i] = b[i + 1];
+                    c[i] = c[i + 1];
+                    b[i + 1] = temp;
+                    c[i + 1] = temp2;
+                } else if (b[i] == b[i + 1] && c[i] > c[i + 1]) {
+                    swapped = true;
+                    int temp3 = c[i];
+                    c[i] = c[i + 1];
+                    c[i + 1] = temp3;
+                }
+            }
+        }
+        int d[][] = new int[b.length][2];
+        for (int i = 0; i < b.length; i++) {
+            d[i][0] = b[i];
+            d[i][1] = c[i];
+        }
+        return d;
+    }
+
+    public static int[][] ysort(int a[][]) {
+        int b[] = new int[a.length];
+        int c[] = new int[a.length];
+        for (int i = 0; i < a.length; i++) {
+            b[i] = a[i][0];
+        }
+        for (int i = 0; i < a.length; i++) {
+            c[i] = a[i][1];
+        }
+        boolean swapped = true;
+        while (swapped) {
+            swapped = false;
+            for (int i = 0; i < b.length - 1; i++) {
+                if (c[i] > c[i + 1]) {
+                    swapped = true;
+                    int temp = b[i];
+                    int temp2 = c[i];
+                    b[i] = b[i + 1];
+                    c[i] = c[i + 1];
+                    b[i + 1] = temp;
+                    c[i + 1] = temp2;
+                } else if (c[i] == c[i + 1] && b[i] > b[i + 1]) {
+                    swapped = true;
+                    int temp3 = c[i];
+                    b[i] = b[i + 1];
+                    b[i + 1] = temp3;
+                }
+            }
+        }
+        int d[][] = new int[b.length][2];
+        for (int i = 0; i < b.length; i++) {
+            d[i][0] = b[i];
+            d[i][1] = c[i];
+        }
+        return d;
+    }
